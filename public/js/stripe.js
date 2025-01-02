@@ -1,0 +1,21 @@
+/* eslint-disable */
+import axios from 'axios';
+import { showAlert } from './alerts';
+const stripe = Stripe(
+  'pk_test_51QbRyOIDLME0niBLEbpIwufV9kJCAZbcKUkFemQ4hy6FveUlY13RHhH2S1Qe8IvhgIG6TyZi5k7eH3uIARghpnX100C8BOpzbo',
+);
+
+export const bookTour = async (tourId) => {
+  try {
+    // 1) Get checkout session from API
+    const session = await axios(`/api/v1/bookings/checkout-session/${tourId}`);
+
+    // 2) Create checkout form + charge credit card
+    await stripe.redirectToCheckout({
+      sessionId: session.data.session.id,
+    });
+  } catch (err) {
+    console.log(err);
+    showAlert('error', err);
+  }
+};
