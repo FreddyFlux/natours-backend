@@ -9,6 +9,7 @@ const hpp = require('hpp');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const cors = require('cors');
 
 // APP-internal requirements
 const AppError = require('./utils/appError');
@@ -28,6 +29,12 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 // 1) GLOBAL MIDDLEWARE
+// Implement CORS
+app.use(cors());
+
+// CORS need special config for SPECIAL REQUESTS (PATCH, DELETE, PUT and OPTIONS)
+app.options('*', cors());
+
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
 // SET Security HTTP Headers
